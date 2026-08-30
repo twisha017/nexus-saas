@@ -1,0 +1,23 @@
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: nexus_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: nexus_admin
+      POSTGRES_PASSWORD: nexus_secure_password
+      POSTGRES_DB: nexus_saas_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nexus_admin -d nexus_saas_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
+    driver: local
